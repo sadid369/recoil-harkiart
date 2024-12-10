@@ -27,3 +27,21 @@ export const totalNotificationSelector = selector({
         return notifications + messaging + jobs + network;
     },
 });
+
+
+// export const postsAtom = atom({
+//     key: "postsAtom",
+//     default: [{}],
+// });
+export const postsAtom = atom({
+    key: "postsAtom",
+    default: selector({
+        key: "postsSelector",
+        get: async () => {
+            // await new Promise((resolve) => setTimeout(resolve, 2000));
+            const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+            const data = await res.json();
+            return data;
+        },
+    }),
+});

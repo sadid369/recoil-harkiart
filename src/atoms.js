@@ -1,4 +1,5 @@
-import { atom, selector } from "recoil";
+import { atom, selector, useRecoilValue, atomFamily, selectorFamily } from "recoil";
+import POSTS from "./posts";
 
 export const networkAtom = atom({
     key: "networkAtom",
@@ -44,4 +45,17 @@ export const postsAtom = atom({
             return data;
         },
     }),
+});
+
+export const postsAtomFamily = atomFamily({
+    key: "postsAtomFamily",
+    default: selectorFamily({
+        key: "postsAtomFamilyDefault",
+        get: (id) => async ({ get }) => {
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+            const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
+            const data = await res.json();
+            return data;
+        },
+    })
 });

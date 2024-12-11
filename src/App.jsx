@@ -1,4 +1,4 @@
-import { useRecoilValue, useRecoilState } from "recoil";
+import { useRecoilValue, useRecoilState, useRecoilValueLoadable } from "recoil";
 import {
   jobsAtom,
   messagingAtom,
@@ -6,6 +6,7 @@ import {
   notificationsAtom,
   postsAtom,
   totalNotificationSelector,
+  postsAtomFamily,
 } from "./atoms";
 import { useEffect } from "react";
 import axios from "axios";
@@ -37,7 +38,7 @@ function App() {
       <button>Messaging ({messagingAtomCount})</button>
       <button>Notifications ({notificationsAtomCount})</button>
       <button>Me ({totalNotificationCount})</button>
-      {posts.map((post) => {
+      {/* {posts.map((post) => {
         console.log(post);
         return (
           <div key={post.id + post.userId}>
@@ -45,7 +46,32 @@ function App() {
             <p>{post.body}</p>
           </div>
         );
-      })}
+      })} */}
+      <Post id={6} />
+      <Post id={6} />
+      <Post id={6} />
+      <Post id={6} />
+      <Post id={6} />
+      <Post id={6} />
+      <Post id={6} />
+      <Post id={6} />
+    </>
+  );
+}
+function Post({ id }) {
+  const post = useRecoilValueLoadable(postsAtomFamily(id));
+  return (
+    <>
+      {post.state === "hasValue" ? (
+        <div key={post.contents.id + post.userId}>
+          <h1>{post.contents.title}</h1>
+          <p>{post.contents.body}</p>
+        </div>
+      ) : post.state === "loading" ? (
+        <h1>Loading...</h1>
+      ) : (
+        "error"
+      )}
     </>
   );
 }
